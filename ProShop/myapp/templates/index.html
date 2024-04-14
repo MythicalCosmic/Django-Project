@@ -1,0 +1,14 @@
+{% load static %}
+
+<html>
+    <head>
+        <link rel="stylesheet" href="{% static 'style.css' %}?{% now 'U' %}">
+    </head>
+    <body class="bg-sky-500">
+        <h1>This is a Index Template</h1>
+        {% for product in products %}
+        <div><a href="{% url 'detail' product.id %}">ID:{{ product.id }} ,NAME:{{ product.name }}, PRICE:{{ product.price }}</a></div>
+        {% endfor %}
+
+    </body>
+</html>
