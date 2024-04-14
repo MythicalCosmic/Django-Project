@@ -4,8 +4,19 @@
     <head>
         <link rel="stylesheet" href="{% static 'style.css' %}?{% now 'U' %}">
     </head>
-    <body class="bg-sky-500">
-        <h1>This is a Index Template</h1>
+    <body>
+        <nav>
+            <div>
+                <div>
+                    <div>
+                        <div class="flex">
+                            <img class="h-8 w-8 " src="{% static 'Images/add-cart.png' %}" alt="">
+                            <span class="text-xl">Pro Shop</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
         {% for product in products %}
         <div><a href="{% url 'detail' product.id %}">ID:{{ product.id }} ,NAME:{{ product.name }}, PRICE:{{ product.price }}</a></div>
         {% endfor %}
