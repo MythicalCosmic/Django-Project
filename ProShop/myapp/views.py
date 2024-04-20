@@ -10,6 +10,7 @@ def index(request):
 
 def indexItem(request, my_id):
     product = Product.objects.get(id=my_id)
-    products = Product.objects.all()
-    return render(request, 'detail.html', {'product': product, 'products': products})
-
+    context = {
+        'item': product
+    }
+    return render(request, 'detail.html', context=context)
