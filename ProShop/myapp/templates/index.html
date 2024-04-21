@@ -14,7 +14,7 @@
     {% for product in products %}
     <a href="{% url 'detail' product.id %}">
         <div class="rounded overflow-hidden shadow-lg">
-            <img class="w-full h-[590px] object-cover" src="{{ product.image }}">
+            <img class="w-full h-[590px] object-cover" src="{{ product.image.url }}">
             <div class="px-6 py-4">
                 <p class="font-bold text-xl mb-2">{{ product.name }}</p>
                 <p class="font-bold text-xl text-green-500 mb-2">${{ product.price }}</p>
@@ -30,7 +30,6 @@
     </a>
     {% endfor %}
 </div>
-
 
 
 {% endblock content %}
