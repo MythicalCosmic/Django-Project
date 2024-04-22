@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from .models import ProductM
 
 def index(request):
@@ -23,4 +23,17 @@ def addItem(request):
         return redirect('/')  
     return render(request, 'addItem.html')
     
-
+def update(request, my_id):
+    product = get_object_or_404(ProductM, id=my_id)
+    if request.method == 'POST':
+        product.name = request.POST.get('name', '')
+        product.price = request.POST.get('price', '')
+        product.description = request.POST.get('description', '')
+        if 'upload' in request.FILES:
+            product.image = request.FILES['upload']  
+        product.save()
+        return redirect('/')
+    context = {
+        'item': product
+    }
+    return render(request, 'update.html', context=context)
