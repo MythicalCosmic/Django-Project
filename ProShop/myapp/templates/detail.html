@@ -9,6 +9,7 @@
         <p class="mt-5 text-green-500">${{ item.price | intcomma   }}</p>
         <p class="mt-5 text-gray-600">{{ item.description }}</p>
         <button class="block bg-green-600 text-white p-3 mt-[50px]"><a href="{% url 'update' item.id %}">Update Item</a></button>
+        <button class="block bg-red-600 text-white p-3 mt-[50px]"><a href="{% url 'delete' item.id %}">Delte Item</a></button>
     </div>
 </div>
 {% endblock content %}

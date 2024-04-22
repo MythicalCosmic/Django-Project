@@ -37,3 +37,13 @@ def update(request, my_id):
         'item': product
     }
     return render(request, 'update.html', context=context)
+
+def delete(request, my_id):
+    product = get_object_or_404(ProductM, id=my_id)
+    if request.method == 'POST':
+        product.delete()
+        return redirect('/')
+    context = {
+        'item': product
+    }
+    return render(request, 'delete.html', context)

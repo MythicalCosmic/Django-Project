@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div>
+    <h1 class="text-2xl m-10 font-bold">Delete Product</h1>
+    <form class="bg-white shadow-md m-10 w-3/5 rounded px-8 pb-8 mb-4" action="" method="post">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label class="block text-gray text-sm font mb-2" for="">Are you sure you what to delete this item?</label>
+            <label class="block text-gray text-sm font mb-2" for="">{{ item.name }}</label>
+            <img class="w-40 h-40" src="{{ item.image.url }}" alt="">
+        </div>
+        <input class="bg-red-500 text-white px-5 py-2" type="submit" value="Confirm">
+        <a class="button bg-green-500 text-white px-5 py-3" href="{% url 'index' %}">Cancel</a>
+    </form>
+</div>
+
+{% endblock content %}
