@@ -20,7 +20,7 @@ def addItem(request):
         image = request.FILES['upload']  
         item = ProductM(name=name, price=price, description=description, image=image)
         item.save()
-        return redirect('/')  
+        return redirect('index')
     return render(request, 'addItem.html')
     
 def update(request, my_id):
