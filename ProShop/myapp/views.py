@@ -20,7 +20,7 @@ def addItem(request):
         image = request.FILES['upload']  
         item = ProductM(name=name, price=price, description=description, image=image)
         item.save()
-        return redirect('index')
+        return redirect('myapp:index')
     return render(request, 'addItem.html')
     
 def update(request, my_id):
@@ -32,7 +32,7 @@ def update(request, my_id):
         if 'upload' in request.FILES:
             product.image = request.FILES['upload']  
         product.save()
-        return redirect('/')
+        return redirect('myapp:index')
     context = {
         'item': product
     }
@@ -42,7 +42,7 @@ def delete(request, my_id):
     product = get_object_or_404(ProductM, id=my_id)
     if request.method == 'POST':
         product.delete()
-        return redirect('/')
+        return redirect('myapp:index')
     context = {
         'item': product
     }
