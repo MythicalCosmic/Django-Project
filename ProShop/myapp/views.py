@@ -47,3 +47,5 @@ def delete(request, my_id):
         'item': product
     }
     return render(request, 'delete.html', context)
+
+

@@ -4,6 +4,7 @@ from django.contrib.auth import login
 from .forms import NewUserForm
 from .forms import CustomAuthenticationForm
 from django.contrib.auth.views import LoginView
+from django.contrib.auth.decorators import login_required
 
 def register(request):
     if request.method == 'POST':
@@ -29,3 +30,6 @@ def check_exists(username):
 class CustomLoginView(LoginView):
     authentication_form = CustomAuthenticationForm
     template_name = 'login.html'
+@login_required
+def profile(request):
+    return render(request, 'profile.html')
