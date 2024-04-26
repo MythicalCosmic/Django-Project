@@ -15,6 +15,14 @@
                      <a href="{% url 'myapp:index' %}" class="py-2 px-2 text-gray-500 font-semibold ">Contacts</a> 
                      <a href="{% url 'myapp:index' %}" class="py-2 px-2 text-gray-500 font-semibold ">Place</a> 
                 </div>
+                <div class="mt-3">
+                    <form id="logout-form flex justify-end" action="{% url 'users:logout' %}" method="post" class="ml-auto">
+                        {% csrf_token %}
+                        <div class="flex justify-end ml-600">
+                            <button style="margin-left: 500px;" type="submit" class="py-2 px-4 bg-green-500 text-white font-semibold rounded-md shadow-md hover:bg-green-600">Logout</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

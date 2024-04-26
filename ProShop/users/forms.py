@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm 
 from django.contrib.auth.models import User
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 
 class NewUserForm(forms.ModelForm):
     email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'class': 'my-outline', 'placeholder': 'example@example.com'}))
@@ -24,3 +25,11 @@ class NewUserForm(forms.ModelForm):
             return True
         else:
             return False
+        
+
+
+class CustomAuthenticationForm(AuthenticationForm):
+    error_messages = {
+        'invalid_login': "Invalid username or password. Please try again.",
+        'inactive': "This account is inactive.",
+    }
