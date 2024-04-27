@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect,get_object_or_404
 from .models import ProductM
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     products = ProductM.objects.all()
@@ -12,17 +13,20 @@ def indexItem(request, my_id):
     }
     return render(request, 'detail.html', context=context)
 
+@login_required
 def addItem(request):
     if request.method == 'POST':
         name = request.POST['name']
         price = request.POST['price']
         description = request.POST['description']
         image = request.FILES['upload']  
-        item = ProductM(name=name, price=price, description=description, image=image)
+        seller = request.user
+        item = ProductM(name=name, price=price, description=description, image=image, seller=seller)
         item.save()
         return redirect('myapp:index')
     return render(request, 'addItem.html')
-    
+
+@login_required   
 def update(request, my_id):
     product = get_object_or_404(ProductM, id=my_id)
     if request.method == 'POST':
@@ -38,6 +42,7 @@ def update(request, my_id):
     }
     return render(request, 'update.html', context=context)
 
+@login_required
 def delete(request, my_id):
     product = get_object_or_404(ProductM, id=my_id)
     if request.method == 'POST':
@@ -47,5 +52,4 @@ def delete(request, my_id):
         'item': product
     }
     return render(request, 'delete.html', context)
-
 

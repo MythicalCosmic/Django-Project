@@ -9,5 +9,7 @@ urlpatterns = [
     path('login/', views.CustomLoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', LogoutView.as_view(template_name='logout.html'), name='logout'),
     path('profile/', views.profile, name='profile'),
+    path('sellerProfile/<int:id>/', views.seller, name='seller'),
+
 ]
  
