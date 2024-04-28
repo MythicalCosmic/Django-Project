@@ -1,17 +1,24 @@
 {% extends 'base.html' %}
 {% block content %}
+
+<!-- Loader -->
+<div id="loader" class="fixed top-0 left-0 h-screen w-screen flex justify-center items-center bg-white bg-opacity-50">
+    <div class="w-28 h-28 border-8 text-blue-400 text-4xl animate-spin border-gray-300 flex items-center justify-center border-t-blue-400 rounded-full">
+        <svg viewBox="0 0 24 24" fill="currentColor" height="1em" width="1em" class="animate-ping">
+            <path d="M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.337 6.182 14.976 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.337 13.382 8.976 12 6.001 12z"></path>
+        </svg>
+    </div>
+</div>
+
 <div class="flex flex-col items-center justify-center h-screen">
     <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6">
       <h2 class="text-2xl font-bold text-gray-900 mb-4">User Registration</h2>
       <form class="flex flex-col" method="post">
         {% csrf_token %}
         {% if form.errors %}
-        <div id="error-popup" class="error-popup hidden">
-          {% for field, error_list in form.errors.items %}
-            {% for error in error_list %}
-              <span>{{ error }}</span>
-            {% endfor %}
-          {% endfor %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+          <strong class="font-bold">Oops! Something went wrong.</strong>
+          <span class="block sm:inline"> Please correct the errors below and try again.</span>
         </div>
         {% endif %}
         <input type="text" name="username" class="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" placeholder="Username...">
@@ -19,58 +26,22 @@
         <input type="password" name="password1" class="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" placeholder="Password">
         <input type="password" name="password2" class="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" placeholder="Confirm Password">
         <div class="flex items-center justify-between flex-wrap">
-          <label for="remember-me" class="text-sm text-gray-900 cursor-pointer">
-            <input type="checkbox" id="remember-me" class="mr-2">
-            Remember me
-          </label>
+        
           <a href="#" class="text-sm text-blue-500 hover:underline mb-0.5">Forgot password?</a>
-          <p class="text-gray-900 mt-4">Already have an account? <a href="{% url 'users:login' %}" class="text-sm text-blue-500 -200 hover:underline mt-4">Login</a></p>
+          <p class="text-gray-900 mt-4">Already  have an account? <a href="{% url 'users:login' %}" class="text-sm text-blue-500 -200 hover:underline mt-4">Login</a></p>
         </div>
         <button type="submit" class="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-indigo-600 hover:to-blue-600 transition ease-in-out duration-150">Register</button>
       </form>
     </div>
   </div>
-  
-{% endblock %}
-<style>
-    .error-popup {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #f44336;
-  color: white;
-  padding: 15px 30px;
-  border-radius: 8px;
-  animation: slide-up 0.5s ease forwards, fade-out 0.5s ease 1s forwards;
-  opacity: 0;
-}
 
-@keyframes slide-up {
-  from {
-    bottom: -100px;
-  }
-  to {
-    bottom: 20px;
-  }
-}
-
-@keyframes fade-out {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-</style>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-  const errorPopup = document.getElementById('error-popup');
-  if (errorPopup) {
-    errorPopup.classList.remove('hidden');
-  }
-});
-
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('loader').classList.remove('hidden');
+        setTimeout(function() {
+            document.getElementById('loader').classList.add('hidden');
+        }, 1200);
+    });
 </script>
+
+{% endblock %}
