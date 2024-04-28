@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-{% load  humanize %}
 <div class="container mx-auto py-8">
     <div id="loader" class="flex-col gap-4 w-full h-screen fixed top-0 left-0 bg-white opacity-75 flex items-center justify-center">
         <div class="w-28 h-28 border-8 text-blue-400 text-4xl animate-spin border-gray-300 flex items-center justify-center border-t-blue-400 rounded-full">
@@ -34,20 +33,44 @@
               <button class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded" id="checkout">Checkout</button>
             </div>
         </div>
-        <hr class="my-8">
     </div>
 </div>
+...
+<hr class="my-8">
+<div style="margin-left: 80px;" class="">
+    <h2 class="text-2xl font-bold mb-4">Product Reviews</h2>
+<div class="grid grid-cols-1 gap-4 ,ml-20">
+    <form action="{% url 'myapp:add_review' item.id %}" method="post">
+        {% csrf_token %}
+        <textarea id="review" name="content" rows="5" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 placeholder-gray-500" placeholder="Write your review here..."></textarea>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Submit Review</button>
+    </form>
+    <div class="grid grid-cols-1 gap-4"> 
+        {% for review in item.reviews.all %}
+        <div class="border p-4 rounded-lg bg-gray-100">
+            <div class="flex items-center mb-2">
+                <p class="text-gray-700"><a href="{% url 'users:seller' user.id %}">@{{ review.user.username }}</a></p>
+
+            </div>
+            <p class="text-gray-600">{{ review.content }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+    {% if not item.reviews.all %}
+    <div class="border p-4 rounded-lg bg-gray-100">
+        <p class="text-gray-600">No reviews yet. Be the first to review this product!</p>
+    </div>
+    {% endif %}
+</div>
+
 <script src="https://js.stripe.com/v3/"></script>
 <script type="text/javascript">
-    // Create an instance of the Stripe object with your publishable API key
     var stripe = Stripe('{{ stripe_publishable_key }}');
     var checkoutButton = document.getElementById('checkout');
 
     checkoutButton.addEventListener('click', function () {
-
-        // Create a new Checkout Session using the server-side endpoint you
-        // created in step 3.
-        fetch("{% url 'myapp:api_checkout_session' id=item.id %}", {
+        fetch("{% url 'myapp:api_checkout_session' item.id %}", {
             method: 'POST',
         })
             .then(function (response) {
@@ -57,9 +80,6 @@
                 return stripe.redirectToCheckout({ sessionId: session.sessionId });
             })
             .then(function (result) {
-                // If `redirectToCheckout` fails due to a browser or network
-                // error, you should display the localized error message to your
-                // customer using `error.message`.
                 if (result.error) {
                     alert(result.error.message);
                 }
@@ -70,7 +90,6 @@
     });
 </script>
 <script type="text/javascript">
-    // Hide the loader after 2 seconds
     setTimeout(function () {
         var loader = document.getElementById('loader');
         loader.classList.add('hidden');

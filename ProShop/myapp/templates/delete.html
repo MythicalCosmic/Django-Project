@@ -7,8 +7,8 @@
         {% csrf_token %}
         <div class="mb-4">
             <label class="block text-gray text-sm font mb-2" for="">Are you sure you what to delete this item?</label>
-            <label class="block text-gray text-sm font mb-2" for="">{{ item.name }}</label>
-            <img class="w-40 h-40" src="{{ item.image.url }}" alt="">
+            <label class="block text-gray text-sm font mb-2" for="">{{ product.name }}</label>
+            <img class="w-40 h-40" src="{{ product.image.url }}" alt="">
         </div>
         <input class="bg-red-500 text-white px-5 py-2" type="submit" value="Confirm">
         <a class="button bg-green-500 text-white px-5 py-3" href="{% url 'myapp:index' %}">Cancel</a>

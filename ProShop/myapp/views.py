@@ -4,11 +4,18 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import DetailView, TemplateView
 from django.core.paginator import Paginator 
 from django.urls import reverse
-from django.http import HttpResponseNotFound, JsonResponse
+from django.http import HttpResponseNotFound, JsonResponse, HttpResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 import stripe
 import logging
+from django.db.models import ProtectedError
+from .models import Product, Review
+from .forms import ReviewForm
+from django.contrib import messages
+from .models import Review
+from .forms import ReviewForm
+from django.contrib import messages
 
 
 @login_required
@@ -60,8 +67,8 @@ def addItem(request):
     return render(request, 'addItem.html')
 
 @login_required   
-def update(request, my_id):
-    product = get_object_or_404(ProductM, id=my_id)
+def update(request, product_id):
+    product = get_object_or_404(ProductM, id=product_id)
     if request.method == 'POST':
         product.name = request.POST.get('name', '')
         product.price = request.POST.get('price', '')
@@ -74,13 +81,16 @@ def update(request, my_id):
     return render(request, 'update.html', context=context)
 
 @login_required
-def delete(request, my_id):
-    product = get_object_or_404(ProductM, id=my_id)
+def delete_product(request, product_id):
+    product = get_object_or_404(ProductM, pk=product_id)
     if request.method == 'POST':
-        product.delete()
-        return redirect('myapp:index')
-    context = {'item': product}
-    return render(request, 'delete.html', context=context)
+        try:
+            product.delete()
+            return redirect('myapp:index')
+        except ProtectedError as e:
+            error_message = "Cannot delete the product because it is referenced by OrderDetail objects."
+            return HttpResponse(error_message, status=400)  
+    return render(request, 'delete.html', {'product': product})
 
 class ProductDetailView(DetailView):
     model = ProductM
@@ -165,3 +175,27 @@ class PaymentSuccessView(TemplateView):
 
 class PaymentFailedView(TemplateView):
     template_name = 'fail.html'
+
+
+
+def product_detail_view(request, product_id):
+    product = get_object_or_404(ProductM, pk=product_id)
+    reviews = Review.objects.filter(product=product)  
+    return render(request, 'detail.html', {'product': product, 'reviews': reviews})
+
+
+@login_required
+def add_review(request, product_id):
+    product = ProductM.objects.get(id=product_id)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.product = product
+            review.user = request.user
+            review.save()
+            messages.success(request, 'Your review has been submitted.')
+            return redirect('myapp:detail', pk=product_id)
+    else:
+        form = ReviewForm()
+    return render(request, 'add_review.html', {'form': form, 'product': product})

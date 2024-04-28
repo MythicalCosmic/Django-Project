@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mx-auto py-8">
+    <h1 class="text-3xl font-bold mb-4">Add Review for {{ product.name }}</h1>
+    <form method="post" action="{% url 'myapp:add_review' product_id=product.id %}">
+        {% csrf_token %}
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        <div class="mb-4">
+            <label for="review" class="block text-gray-700 font-bold mb-2">Your Review:</label>
+            <textarea id="review" name="review" rows="5" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 placeholder-gray-500" placeholder="Write your review here..."></textarea>
+        </div>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Submit Review</button>
+    </form>
+</div>
+{% endblock %}
